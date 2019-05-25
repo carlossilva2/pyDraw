@@ -1,6 +1,6 @@
 # pyDraw
 **A library for 2D rendering, using the [pyGame]('https://www.pygame.org/news') library**
-###How to use
+### How to use
 
 * First install all requirements by running the command `pip install -r requirements.txt`;
 * Next, create a folder named `Projects`;

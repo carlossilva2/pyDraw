@@ -1,0 +1,17 @@
+{
+    "Sketch_Base": {
+        "prefix": "sketch",
+        "scope": "python",
+        "body": [
+          "from core import *\n",
+          "\ndef pre():",
+          "\treturn CreateCanvas(${2:width}, ${1:height}) #change values for window size",
+          "\n\ndef setup():",
+          "\t#remove pass after inputing your code\n",
+          "\tpass\n",
+          "\ndef draw():\n",
+          "\tpass"
+        ],
+        "description": "Base code for Sketch file"
+    }
+}

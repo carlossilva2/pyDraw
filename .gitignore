@@ -101,3 +101,16 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+# pyDraw Directories
+Projects/
+Sounds/
+Logs/
+Images/
+# REMOVE THIS WHEN READY TO DEPLOY
+Test/
+*.backup.py
+*.deprecated.py
+Docs/
+.DS_Store

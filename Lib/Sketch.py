@@ -1,4 +1,4 @@
-from core import *
+from Core.Minimum import *
 
 def pre():
     return CreateCanvas(width, height) #change values for window size

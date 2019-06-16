@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 MIT License
 
@@ -31,7 +33,7 @@ try:
 except ImportError:
     print("Colored traceback is advisable, please install...")
     exit(1)
-from os import getcwd, listdir, mkdir
+from os import getcwd, listdir, mkdir, environ
 from sys import path
 import logging as log
 from time import strftime, time
@@ -51,12 +53,14 @@ if "Images" not in listdir("."):
 
 log.basicConfig(filename="Logs/log {}.bin".format(strftime("%d-%m-%Y")),level=log.DEBUG)
 
+#path.insert(0,'pyDraw/')
 class pyDraw:
 
-    __version__ = 0.1
-    
+    __version__ = 0.11
+
     def __init__(self, sketch):
         self.start_time = time()
+        self.current_time = self.start_time
         self.setup_flag = False
         self.draw_flag = False
         self.hold = False
@@ -72,10 +76,13 @@ class pyDraw:
         else:
             self.width = d.width
             self.height = d.height
+        environ['WIDTH'] = str(self.width)
+        environ['HEIGHT'] = str(self.height)
         self.screen = pygame.display.set_mode([self.width, self.height])
         setScreen(self.screen, self.width, self.height)
         log.info("Screen set - {}x{}".format(self.width,self.height))
         try:
+            update()
             setup()
         except Exception as err:
             log.error(err)
@@ -129,7 +136,7 @@ class pyDraw:
                 pygame.display.update()
             elif event.type == pygame.KEYDOWN and event.key == KEYS['s']:
                 screenshot("{} - {}.jpg".format(self.sketch_name,strftime("%H_%M_%S")))
-                logger.info("Screenshot taken")
+                log.info("Screenshot taken")
 
     def start(self):
         while not self.spin():
@@ -138,7 +145,8 @@ class pyDraw:
                     self.draw()
                     clock.tick(120)
                     FRAMECOUNT.add(1)
-                    if floor(time() - self.start_time) >= 0.6:
+                    if floor(time() - self.current_time) >= 0.6:
+                        self.current_time = time()
                         ThdMng.search()
                 else:
                     continue
@@ -151,6 +159,17 @@ class pyDraw:
                 exit(0)
 
 def get_sketches():
+
+    def getInput(length):
+        choice = ""
+        try:
+            choice = input("Choose a project: ")
+            if int(choice) > length-1 or int(choice) < 0 or choice is None or choice is "":
+                raise Exception
+        except Exception:
+            choice = getInput(length)
+        return choice
+
     sec = listdir(".")
     if "Projects" not in sec:
         mkdir("./Projects")
@@ -166,7 +185,8 @@ def get_sketches():
                 print(index, " | ",pr,flush=True)
             else:
                 print(index, "| ",pr,flush=True)
-        choice = input("Choose a project: ")
+        #choice = input("Choose a project: ")
+        choice = getInput(len(projects))
         if type(choice) != int and (int(choice) < 0 or int(choice) > len(projects) - 1):
             print("You introduced the wrong number, going with the first result",flush=True)
             path.insert(0, './Projects/{0}/'.format(projects[0]))

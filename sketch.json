@@ -3,7 +3,7 @@
         "prefix": "sketch",
         "scope": "python",
         "body": [
-          "from core import *\n",
+          "from Core.Minimum import *\n",
           "\ndef pre():",
           "\treturn CreateCanvas(${2:width}, ${1:height}) #change values for window size",
           "\n\ndef setup():",

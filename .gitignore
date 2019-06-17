@@ -112,7 +112,7 @@ Images/
 Test/
 *.backup.py
 *.deprecated.py
-Docs/_build
-Docs/_static
-Docs/_templates
+docs/_build
+docs/_static
+docs/_templates
 .DS_Store

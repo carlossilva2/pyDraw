@@ -22,7 +22,7 @@ Other pages (online)
 .. _`project page on GitHub`: https://github.com/carlossilva2/pyDraw
 .. _`Download Page`: https://github.com/carlossilva2/pyDraw/releases
 
-Contents:
+Contents
 
 .. toctree::
     :maxdepth: 2

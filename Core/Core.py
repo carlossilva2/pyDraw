@@ -25,7 +25,7 @@ SOFTWARE.
 import pygame
 from time import sleep,strftime,time
 from dataclasses import dataclass
-from math import e,pi,sin
+from math import e,pi,sin,cos,radians
 import colored_traceback.always
 from os import listdir, mkdir, cpu_count
 from threading import Thread, active_count, current_thread
@@ -34,6 +34,7 @@ from logging import getLogger
 from copy import deepcopy,copy
 from pyautogui import size
 from tkinter import Tk, Scale, Frame, HORIZONTAL
+from Core.Vector import Vector2
 
 logger = getLogger(__name__)
 
@@ -104,9 +105,6 @@ def running_time():
 
 def getFPS():
   return round(clock.get_fps())
-
-def forceUpdate():
-  pygame.display.update()
 
 def getScreenInfo():
   return [size().width,size().height]
@@ -203,7 +201,7 @@ class ProgressBar:
     self.value = val
   
   def show(self):
-    if self.orientation is "HORIZONTAL":
+    if self.orientation == "HORIZONTAL":
       x = mapping(self.value,self.min,self.max,0,self.max_width)
       line([self.pos.x,self.pos.y],[self.pos.x+x,self.pos.y],self.color,self.max_height)
       if self.tooltip:
@@ -383,7 +381,7 @@ def CreateCanvas(width, height):
   window = Dimensions(width, height)
   return window
 
-@property
+#@property
 def getSize():
   return window
 
@@ -400,6 +398,34 @@ def getPixelArray(screen):
 
 def paintPixel(pos,color,pixar):
   pixar[pos.x][pos.y] = color
+
+def triangle(*args, **kargs):
+  arr = getPixelArray(sc.screen)
+  def area(x1, y1, x2, y2, x3, y3): 
+    return abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0)
+
+  def isInside(x1, y1, x2, y2, x3, y3, x, y): 
+      A = area(x1, y1, x2, y2, x3, y3) 
+      A1 = area(x, y, x2, y2, x3, y3)
+      A2 = area(x1, y1, x, y, x3, y3)
+      A3 = area(x1, y1, x2, y2, x, y)
+      if(A == A1 + A2 + A3): 
+          return True
+      else: 
+          return False
+  filled = kargs['filled'] if "filled" in kargs.keys() else False
+  line([args[0].x,args[0].y],[args[1].x,args[1].y],args[3])
+  line([args[1].x,args[1].y],[args[2].x,args[2].y],args[3])
+  line([args[0].x,args[0].y],[args[2].x,args[2].y],args[3])
+  if filled:
+    toFill = []
+    for x in range(sc.width):
+      for y in range(sc.height):
+        if isInside(args[0].x,args[0].y,args[1].x,args[1].y,args[2].x,args[2].y,x,y):
+          toFill.append(Vector2(x,y))
+    for item in toFill:
+      paintPixel(item,args[3],arr)
+
 
 def fps30():
   return 1 / 30

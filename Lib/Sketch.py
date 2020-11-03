@@ -1,4 +1,4 @@
-from Core.Minimum import *
+#PYDRAW_
 
 def pre():
     return CreateCanvas(width, height) #change values for window size

@@ -37,6 +37,7 @@ def mapping(x, in_min, in_max, out_min, out_max):
         return int((x - in_min) / (in_max - in_min) * (out_max - out_min) + out_min)
     elif type(x) == float:
         return float((x - in_min) / (in_max - in_min) * (out_max - out_min) + out_min)
+    return (x - in_min) / (in_max - in_min) * (out_max - out_min) + out_min
 
 
 class Noise:
@@ -306,10 +307,11 @@ class Quadratic:
                     self.a = int(part[:-2])
             elif "x" in part:
                 if len(part) == 2:
-                    if part[0] == "+":
-                        self.b = 1
-                    elif part[0] == "-":
-                        self.b = -1
+                    #if part[0] == "+":
+                        #self.b = 1
+                    #elif part[0] == "-":
+                        #self.b = -1
+                    self.b = 1 if part[0] == "+" else -1
                 else:
                     self.b = int(part[:-1])
             elif "x" not in part and "x2" not in part:
@@ -342,3 +344,54 @@ class Quadratic:
         b = self.b * x
         result = a + b + self.c
         return result
+
+def __df(f,x,h): 
+    r = (f(x + h/2) - f(x-h/2)) / h
+    return r
+
+def Derivate(f):
+	h = 1e-8
+	def dx(x): return __df(f,x,h)
+	return dx
+
+def Integral(f):
+	h = 1e-4
+	def intf(b,a=0):
+		sum = 0
+		x = a
+		while x<=b:
+			sum += h * __df(f,x,h) / 2.0
+			x += h
+		return sum
+	return intf
+
+def closest_value(arr, target):
+    n = len(arr)
+    left = 0
+    right = n - 1
+    mid = 0
+
+    if target >= arr[n - 1]:
+        return arr[n - 1]
+
+    while (left < right):
+        mid = (left + right) // 2
+
+        if arr[mid] == target:
+            return arr[mid]
+
+        if target < arr[mid]:
+            if mid > 0 and target > arr[mid - 1]:
+                return __findClosest(arr[mid - 1], arr[mid], target)
+            right = mid
+        else:
+            if mid < n - 1 and target < arr[mid + 1]:
+                return __findClosest(arr[mid], arr[mid + 1], target)
+            left = mid + 1
+    return arr[mid]
+
+def __findClosest(val1, val2, target):
+    if target - val1 >= val2 - target:
+        return val2
+    else:
+        return val1

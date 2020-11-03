@@ -108,11 +108,14 @@ Projects/
 Sounds/
 Logs/
 Images/
+Screenshots/
 # REMOVE THIS WHEN READY TO DEPLOY
 Test/
 *.backup.py
 *.deprecated.py
-docs/_build
-docs/_static
-docs/_templates
+docs/
+#docs/_build
+#docs/_static
+#docs/_templates
+Core/Variable.py
 .DS_Store
